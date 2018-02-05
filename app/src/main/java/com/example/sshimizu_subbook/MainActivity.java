@@ -222,8 +222,8 @@ public class MainActivity extends AppCompatActivity {
                 setResult(RESULT_OK);
                 //Subscript.clear();
                 Subscript.remove(Position);
+                CurrentSubList.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                v.setSelected(false);
 
                 saveInFile();
             }
