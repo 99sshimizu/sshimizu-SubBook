@@ -5,11 +5,13 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -77,10 +79,14 @@ public class SubscriptionEditView extends AppCompatActivity {
 
             public void onClick(View v) {
                 setResult(RESULT_OK);
-                if ((subDate.getText().toString().matches("yyyy-mm-dd")) ||
-                        (subName.getText().toString().matches("")) ||
-                        (subCharge.getText().toString().matches(""))) {
-                    subName.setText("Please fill in all place");
+                if (subDate.getText().toString().matches("yyyy-mm-dd")){
+                    toastMake("Please fill in date of subscription", 0, -200);
+                }
+                else if (subName.getText().toString().matches("")){
+                    toastMake("Please fill in name of subscription", 0, -200);
+                }
+                else if (subCharge.getText().toString().matches("")){
+                    toastMake("Please fill in charges of subscription", 0, -200);
                 }
                 else{
                     String Date = subDate.getText().toString();
@@ -90,7 +96,13 @@ public class SubscriptionEditView extends AppCompatActivity {
                     float charges = Float.parseFloat( subCharge.getText().toString() );
                     String StringCharges = String.format("%.2f", charges);
 
-                    if ((name.length() <= 20) && (comment.length() <= 30)){
+                    if (name.length() > 20){
+                        toastMake("Subscription name too long", 0, -200);
+                    }
+                    else if (comment.length() > 30){
+                        toastMake("Comments too long", 0, -200);
+                    }
+                    else {
                         Intent intent = new Intent();
                         intent.putExtra("RESULT_NAME", name);
                         intent.putExtra("RESULT_DATE", Date);
@@ -100,13 +112,16 @@ public class SubscriptionEditView extends AppCompatActivity {
                         setResult(RESULT_OK, intent);
                         finish();
                     }
-                    else {
-                        subName.setText("name max = 20, comment max = 30");
-                    }
                 }
 
             }
         });
 
+    }
+    private void toastMake(String message, int x, int y){
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        // 位置調整
+        toast.setGravity(Gravity.CENTER, x, y);
+        toast.show();
     }
 }

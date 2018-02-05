@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,6 +35,7 @@ import java.util.Calendar;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private static final String FILENAME = "file.sav";
@@ -118,10 +120,14 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View v) {
                 setResult(RESULT_OK);
-                if ((SubDates.getText().toString().matches("yyyy-mm-dd")) ||
-                        (SubNames.getText().toString().matches("")) ||
-                        (Charges.getText().toString().matches(""))) {
-                    SubNames.setText("Please fill in all place");
+                if (SubDates.getText().toString().matches("yyyy-mm-dd")) {
+                    toastMake("Please fill in date of subscription", 0, -200);
+                }
+                else if (SubNames.getText().toString().matches("")){
+                    toastMake("Please fill in name of subscription", 0, -200);
+                }
+                else if (Charges.getText().toString().matches("")){
+                    toastMake("Please fill in charges of subscription", 0, -200);
                 }
                 else{
                     String Date = SubDates.getText().toString();
@@ -129,7 +135,13 @@ public class MainActivity extends AppCompatActivity {
                     String comment = comments.getText().toString();
                     float charges = Float.parseFloat( Charges.getText().toString() );
                     String StringCharges = String.format("%.2f", charges);
-                    if ((name.length() <= 20) && (comment.length() <= 30)){
+                    if (name.length() > 20){
+                        toastMake("Subscription name too long", 0, -200);
+                    }
+                    else if (comment.length() > 30){
+                        toastMake("Comments too long", 0, -200);
+                    }
+                    else {
                         Subscript.add(new NewSubscription(name, Date, StringCharges, comment));
                         adapter.notifyDataSetChanged();
 
@@ -138,9 +150,6 @@ public class MainActivity extends AppCompatActivity {
                         Charges.setText("");
                         comments.setText("");
                         saveInFile();
-                    }
-                    else {
-                        SubNames.setText("name max = 20, comment max = 30");
                     }
                 }
 
@@ -183,23 +192,15 @@ public class MainActivity extends AppCompatActivity {
                 //startActivity(intent);
                 startActivityForResult(intent, RESULT_SUBACTIVITY);
 
-                /*Intent intents = getIntent();
-                String name = intents.getStringExtra("RESULT_NAME");
-                String date = intents.getStringExtra("RESULT_DATE");
-                String charge = intents.getStringExtra("RESULT_CHARGES");
-                String comments = intents.getStringExtra("RESULT_COMMENTS");
-                Integer j = intents.getIntExtra("RESULT_POS",0);
-
-                Subscript.get(j).setSubName(name);
-                Subscript.get(j).setSubDate(date);
-                Subscript.get(j).setSubCharge(charge);
-                Subscript.get(j).setSubComments(comments);
-
-                saveInFile();*/
-
                 return false;
             }
         });
+    }
+    private void toastMake(String message, int x, int y){
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        // 位置調整
+        toast.setGravity(Gravity.CENTER, x, y);
+        toast.show();
     }
 
     @Override
@@ -213,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                 String charge = intent.getStringExtra("RESULT_CHARGE");
                 String comments = intent.getStringExtra("RESULT_COMMENTS");
                 String j = intent.getStringExtra("RESULT_POS");
-                
+
                 int position = Integer.parseInt(j);
                 Subscript.get(position).setSubName(name);
                 Subscript.get(position).setSubDate(date);
