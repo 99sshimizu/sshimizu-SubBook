@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                 Subscript.remove(Position);
                 CurrentSubList.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
+                //Saves file
                 saveInFile();
             }
         });
