@@ -8,20 +8,19 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="641dp"
+        android:layout_width="391dp"
+        android:layout_height="570dp"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:context=".MainActivity">
 
         <ListView
             android:id="@+id/SubscriptionLists"
             android:layout_width="match_parent"
-            android:layout_height="405dp"
+            android:layout_height="381dp"
             android:choiceMode="singleChoice"
             android:listSelector="#999999">
 
